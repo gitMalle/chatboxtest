@@ -37,6 +37,7 @@ export const useChatStore = create<ChatState>()(
 					messages: [...state.messages, message],
 					input: "",
 					isReplying: true,
+					error: null,
 				}));
 
 				try {

@@ -9,7 +9,8 @@ import { Loader2, Send } from "lucide-react";
 import { ChatMessage } from "./ChatMessage";
 
 export default function Home() {
-	const { messages, input, setInput, sendMessage, isReplying } = useChatStore();
+	const { messages, input, setInput, sendMessage, isReplying, error } =
+		useChatStore();
 	const endRef = useRef<HTMLDivElement>(null);
 	const { isHydrated, country, continent, destination } = usePreferenceStore();
 
@@ -40,6 +41,11 @@ export default function Home() {
 						const isUser = i % 2 === 0;
 						return <ChatMessage key={i} content={msg} isUser={isUser} />;
 					})}
+					{error && (
+						<div className="flex flex-col items-center justify-center">
+							<p className="text-sm text-red-400">{error}</p>
+						</div>
+					)}
 					{isReplying && <Loader2 className="animate-spin mx-auto" />}
 					<div ref={endRef} />
 				</div>
