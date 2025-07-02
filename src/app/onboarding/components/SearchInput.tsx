@@ -32,12 +32,17 @@ export const SearchInput = ({
 				handleSubmit(value);
 			}}
 		>
-			<Combobox value={value} onChange={(value) => setValue(value || "")}>
+			<Combobox
+				value={value}
+				onChange={(value) => setValue(value || "")}
+				immediate
+			>
 				<div className="relative">
 					<ComboboxInput
 						className="bg-slate-800 rounded-md border-1 border-slate-700 px-4 py-2 w-full max-w-xl"
 						onChange={(event) => setValue(event.target.value)}
 						autoComplete="off"
+						autoFocus
 						{...props}
 					/>
 					<button
