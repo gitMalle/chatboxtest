@@ -6,6 +6,7 @@ import { useRef, useEffect } from "react";
 import { PreferenceSidebar } from "./PreferenceSidebar";
 import { useChatStore } from "@/stores/chatStore";
 import cn from "classnames";
+import { md } from "@/utils/markdown";
 
 export default function Home() {
 	const { messages, input, setInput, sendMessage } = useChatStore();
@@ -25,9 +26,9 @@ export default function Home() {
 	return (
 		<div className="flex flex-row h-dvh w-dvw">
 			<PreferenceSidebar />
-			<div className="flex flex-col flex-1">
+			<div className="flex flex-col flex-1 bg-slate-950">
 				<div className="flex-1 flex flex-col p-4 overflow-y-auto space-y-8">
-					{messages.map((m, i) => {
+					{messages.map((msg, i) => {
 						const isUser = i % 2 === 0;
 						return (
 							<div
@@ -37,7 +38,11 @@ export default function Home() {
 										isUser,
 								})}
 							>
-								{m}
+								{isUser ? (
+									msg
+								) : (
+									<div dangerouslySetInnerHTML={{ __html: md.render(msg) }} />
+								)}
 							</div>
 						);
 					})}
