@@ -1,6 +1,5 @@
 import { systemPromptOptions } from "@/data";
-import { usePreferenceStore } from "@/stores";
-import { useChatStore } from "@/stores/chatStore";
+import { usePreferenceStore, useChatStore } from "@/stores";
 import { Select } from "@headlessui/react";
 import { RefreshCw } from "lucide-react";
 

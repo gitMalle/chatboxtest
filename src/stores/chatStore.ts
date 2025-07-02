@@ -7,6 +7,7 @@ type ChatState = {
 	messages: string[];
 	selectedSystemPromptId: string;
 	error: string | null;
+	isReplying: boolean;
 
 	setSelectedSystemPrompt: (selectedSystemPrompt: string) => void;
 	sendMessage: () => Promise<void>;
@@ -20,6 +21,7 @@ export const useChatStore = create<ChatState>()(
 			messages: [],
 			selectedSystemPromptId: "default",
 			error: null,
+			isReplying: false,
 
 			setInput: (input: string) => set({ input }),
 
@@ -34,6 +36,7 @@ export const useChatStore = create<ChatState>()(
 				set((state) => ({
 					messages: [...state.messages, message],
 					input: "",
+					isReplying: true,
 				}));
 
 				try {
@@ -79,6 +82,8 @@ export const useChatStore = create<ChatState>()(
 					set({
 						error: error instanceof Error ? error.message : "An error occurred",
 					});
+				} finally {
+					set({ isReplying: false });
 				}
 			},
 		}),
