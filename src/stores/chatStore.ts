@@ -5,7 +5,7 @@ import { usePreferenceStore } from "./preferenceStore";
 type ChatState = {
 	input: string;
 	messages: string[];
-	selectedSystemPrompt: string;
+	selectedSystemPromptId: string;
 	error: string | null;
 
 	setSelectedSystemPrompt: (selectedSystemPrompt: string) => void;
@@ -18,13 +18,13 @@ export const useChatStore = create<ChatState>()(
 		(set, get) => ({
 			input: "",
 			messages: [],
-			selectedSystemPrompt: "default",
+			selectedSystemPromptId: "default",
 			error: null,
 
 			setInput: (input: string) => set({ input }),
 
-			setSelectedSystemPrompt: (selectedSystemPrompt: string) =>
-				set({ selectedSystemPrompt }),
+			setSelectedSystemPrompt: (selectedSystemPromptId: string) =>
+				set({ selectedSystemPromptId }),
 
 			sendMessage: async () => {
 				const message = get().input;
@@ -37,7 +37,7 @@ export const useChatStore = create<ChatState>()(
 				}));
 
 				try {
-					const { messages, selectedSystemPrompt } = get();
+					const { messages, selectedSystemPromptId } = get();
 					const response = await fetch("/api/stream", {
 						method: "POST",
 						headers: {
@@ -46,7 +46,7 @@ export const useChatStore = create<ChatState>()(
 						},
 						body: JSON.stringify({
 							messages,
-							systemPromptId: selectedSystemPrompt,
+							systemPromptId: selectedSystemPromptId,
 							locations: {
 								destination: usePreferenceStore.getState().destination,
 								country: usePreferenceStore.getState().country,
@@ -86,7 +86,7 @@ export const useChatStore = create<ChatState>()(
 			name: "chat",
 			storage: createJSONStorage(() => localStorage),
 			partialize: (state) => ({
-				selectedSystemPrompt: state.selectedSystemPrompt,
+				selectedSystemPromptId: state.selectedSystemPromptId,
 			}),
 		}
 	)

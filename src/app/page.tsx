@@ -7,6 +7,7 @@ import { PreferenceSidebar } from "./PreferenceSidebar";
 import { useChatStore } from "@/stores/chatStore";
 import cn from "classnames";
 import { md } from "@/utils/markdown";
+import { Send } from "lucide-react";
 
 export default function Home() {
 	const { messages, input, setInput, sendMessage } = useChatStore();
@@ -48,19 +49,19 @@ export default function Home() {
 					})}
 					<div ref={endRef} />
 				</div>
-				<div className="p-3 flex gap-2">
+				<div className="p-3 flex gap-2 bg-slate-900">
 					<input
 						value={input}
 						onChange={(e) => setInput(e.target.value)}
 						onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-						className="flex-1 rounded-md border px-2 py-1 text-sm bg-transparent outline-none"
+						className="flex-1 rounded-md px-4 py-3 text-sm bg-transparent outline-none"
 						placeholder="Type a message"
 					/>
 					<button
 						onClick={sendMessage}
-						className="px-3 py-1 rounded-md bg-blue-600 text-white text-sm hover:bg-blue-700"
+						className="px-3 py-1 rounded-md bg-slate-700 text-sm hover:bg-slate-800 cursor-pointer"
 					>
-						Send
+						<Send />
 					</button>
 				</div>
 			</div>

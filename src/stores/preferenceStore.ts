@@ -11,6 +11,7 @@ type PreferenceState = {
 	setContinent: (continent: string) => void;
 	setDestination: (destination: string) => void;
 	setIsHydrated: (isHydrated: boolean) => void;
+	resetPreferences: () => void;
 };
 
 export const usePreferenceStore = create<PreferenceState>()(
@@ -25,6 +26,8 @@ export const usePreferenceStore = create<PreferenceState>()(
 			setContinent: (continent: string) => set({ continent }),
 			setDestination: (destination: string) => set({ destination }),
 			setIsHydrated: (isHydrated: boolean) => set({ isHydrated }),
+			resetPreferences: () =>
+				set({ country: null, continent: null, destination: null }),
 		}),
 		{
 			name: "preferences",
