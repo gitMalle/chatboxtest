@@ -28,7 +28,7 @@ export const PreferenceSidebar = () => {
 			</div>
 
 			<button
-				className="bg-slate-800 p-2 rounded-md cursor-pointer flex items-center justify-center gap-2 hover:bg-slate-700"
+				className="bg-slate-800 p-2 rounded-md cursor-pointer flex items-center justify-center gap-2 ml-auto md:ml-0 hover:bg-slate-700"
 				onClick={() => {
 					resetPreferences();
 				}}
@@ -37,7 +37,7 @@ export const PreferenceSidebar = () => {
 				<span className="hidden md:block">Reset Settings</span>
 			</button>
 
-			<div className="mt-auto flex flex-col gap-2">
+			<div className="mt-auto flex flex-row items-center md:items-start md:flex-col gap-2">
 				<label htmlFor="personality">Personality</label>
 				<Select
 					name="personality"
