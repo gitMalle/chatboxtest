@@ -1,0 +1,93 @@
+import { create } from "zustand";
+import { createJSONStorage, persist } from "zustand/middleware";
+import { usePreferenceStore } from "./preferenceStore";
+
+type ChatState = {
+	input: string;
+	messages: string[];
+	selectedSystemPrompt: string;
+	error: string | null;
+
+	setSelectedSystemPrompt: (selectedSystemPrompt: string) => void;
+	sendMessage: () => Promise<void>;
+	setInput: (input: string) => void;
+};
+
+export const useChatStore = create<ChatState>()(
+	persist(
+		(set, get) => ({
+			input: "",
+			messages: [],
+			selectedSystemPrompt: "default",
+			error: null,
+
+			setInput: (input: string) => set({ input }),
+
+			setSelectedSystemPrompt: (selectedSystemPrompt: string) =>
+				set({ selectedSystemPrompt }),
+
+			sendMessage: async () => {
+				const message = get().input;
+				if (!message) return;
+
+				// add user message to messages
+				set((state) => ({
+					messages: [...state.messages, message],
+					input: "",
+				}));
+
+				try {
+					const { messages, selectedSystemPrompt } = get();
+					const response = await fetch("/api/stream", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+							Accept: "text/event-stream",
+						},
+						body: JSON.stringify({
+							messages,
+							systemPromptId: selectedSystemPrompt,
+							locations: {
+								destination: usePreferenceStore.getState().destination,
+								country: usePreferenceStore.getState().country,
+								continent: usePreferenceStore.getState().continent,
+							},
+						}),
+					});
+
+					if (!response.ok || !response.body) throw new Error("No stream");
+
+					const reader = response.body.getReader();
+					const decoder = new TextDecoder("utf-8");
+					let result = "";
+					// add empty string to messages for incoming response
+					set((state) => ({
+						messages: [...state.messages, ""],
+					}));
+
+					while (true) {
+						const { done, value } = await reader.read();
+						if (done) break;
+						result += decoder.decode(value);
+						set((state) => ({
+							messages: [...state.messages.slice(0, -1), result],
+						}));
+
+						console.log({ chunk: result });
+					}
+				} catch (error) {
+					set({
+						error: error instanceof Error ? error.message : "An error occurred",
+					});
+				}
+			},
+		}),
+		{
+			name: "chat",
+			storage: createJSONStorage(() => localStorage),
+			partialize: (state) => ({
+				selectedSystemPrompt: state.selectedSystemPrompt,
+			}),
+		}
+	)
+);
