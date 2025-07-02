@@ -26,7 +26,7 @@ export default function Home() {
 	}, [messages]);
 
 	return (
-		<div className="flex flex-row h-dvh w-dvw">
+		<div className="flex flex-col md:flex-row h-dvh w-dvw">
 			<PreferenceSidebar />
 			<div className="flex flex-col flex-1 bg-slate-950">
 				<div className="flex-1 flex flex-col p-4 overflow-y-auto space-y-8">

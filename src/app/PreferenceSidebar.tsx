@@ -9,8 +9,8 @@ export const PreferenceSidebar = () => {
 	const { setSelectedSystemPrompt, selectedSystemPromptId } = useChatStore();
 
 	return (
-		<div className="w-80 bg-slate-900 flex flex-col p-4 gap-4">
-			<h3 className="font-bold">Your Settings</h3>
+		<div className="w-full md:w-80 bg-slate-900 flex flex-row md:flex-col flex-wrap md:flex-nowrap p-4 gap-4">
+			<h3 className="font-bold hidden md:block">Your Settings</h3>
 
 			<div className="flex flex-col gap-1">
 				<p className="text-sm">Country</p>
@@ -34,7 +34,7 @@ export const PreferenceSidebar = () => {
 				}}
 			>
 				<RefreshCw className="w-4 h-4" />
-				Reset Settings
+				<span className="hidden md:block">Reset Settings</span>
 			</button>
 
 			<div className="mt-auto flex flex-col gap-2">
