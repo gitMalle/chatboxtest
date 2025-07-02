@@ -20,6 +20,7 @@ export const usePreferenceStore = create<PreferenceState>()(
 			country: null,
 			continent: null,
 			destination: null,
+			// isHydrated is needed to wait until data is loaded from localStorage
 			isHydrated: false,
 
 			setCountry: (country: string) => set({ country }),
