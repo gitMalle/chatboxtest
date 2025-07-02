@@ -5,15 +5,15 @@ import { redirect } from "next/navigation";
 import { useRef, useEffect } from "react";
 import { PreferenceSidebar } from "./PreferenceSidebar";
 import { useChatStore } from "@/stores/chatStore";
-import cn from "classnames";
-import { md } from "@/utils/markdown";
 import { Send } from "lucide-react";
+import { ChatMessage } from "./ChatMessage";
 
 export default function Home() {
 	const { messages, input, setInput, sendMessage } = useChatStore();
 	const endRef = useRef<HTMLDivElement>(null);
 	const { isHydrated, country, continent, destination } = usePreferenceStore();
 
+	// redirect to onboarding if not all preferences are set
 	useEffect(() => {
 		if (isHydrated && (!country || !continent || !destination)) {
 			redirect("/onboarding");
@@ -31,21 +31,7 @@ export default function Home() {
 				<div className="flex-1 flex flex-col p-4 overflow-y-auto space-y-8">
 					{messages.map((msg, i) => {
 						const isUser = i % 2 === 0;
-						return (
-							<div
-								key={i}
-								className={cn("break-words", {
-									"self-end bg-slate-800 max-w-1/2 rounded-lg px-4 py-2":
-										isUser,
-								})}
-							>
-								{isUser ? (
-									msg
-								) : (
-									<div dangerouslySetInnerHTML={{ __html: md.render(msg) }} />
-								)}
-							</div>
-						);
+						return <ChatMessage key={i} content={msg} isUser={isUser} />;
 					})}
 					<div ref={endRef} />
 				</div>
@@ -61,7 +47,7 @@ export default function Home() {
 						onClick={sendMessage}
 						className="px-3 py-1 rounded-md bg-slate-700 text-sm hover:bg-slate-800 cursor-pointer"
 					>
-						<Send />
+						<Send className="w-4 h-4" />
 					</button>
 				</div>
 			</div>
